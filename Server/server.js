@@ -21,6 +21,6 @@ app.use('/food',foodRouter)
 
 
 
-app.listen(4000,'localhost',()=>{
+app.listen(4000,'0.0.0.0',()=>{
     console.log("express start server is start listening at port no 4000 at local host ........")
 })
