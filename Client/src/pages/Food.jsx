@@ -49,7 +49,7 @@ function Food() {
                                         <p className="card-text" style={{ height: '8rem' }}>{f.description}</p>
                                         <h5 className="card-title">Rs. {f.price}</h5>
                                         <a href="#" className="btn btn-primary" onClick={() =>
-                                          addToCart
+                                          addToCart(f)
                                           }>Add To Cart</a>
                                     </div>
                                 </div>

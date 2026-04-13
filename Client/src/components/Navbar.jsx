@@ -3,11 +3,13 @@ import {Link} from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { authContext } from '../App'
 import Logo from './../assets/logo.png'
+import { useSelector } from 'react-redux'
 
 
 function Navbar() {
     const navigate =useNavigate()
     const {setUser} = useContext(authContext)
+    const cart = useSelector(store => store.cartReducer.cart)
   
   return (
     <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
@@ -26,7 +28,7 @@ function Navbar() {
                             <Link className="nav-link" to="/home">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/home/cart">Cart</Link>
+                            <Link className="nav-link" to="/home/cart">Cart:{cart.length}</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/home/orders">Orders</Link>
