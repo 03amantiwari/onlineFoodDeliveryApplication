@@ -1,52 +1,91 @@
 import React, { useContext } from 'react'
-import {Link} from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { authContext } from '../App'
 import Logo from './../assets/logo.png'
 import { useSelector } from 'react-redux'
 
-
 function Navbar() {
-    const navigate =useNavigate()
-    const {setUser} = useContext(authContext)
-    const cart = useSelector(store => store.cartReducer.cart)
-  
+
+  const navigate = useNavigate()
+  const { setUser } = useContext(authContext)
+  const cart = useSelector(state => state.cartReducer.cart)
+
+  const handleLogout = () => {
+    setUser(null)
+    window.sessionStorage.removeItem('token')
+    navigate('/')
+  }
+
   return (
-    <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-            <div className="container-fluid">
-                <span className="navbar-brand" href="#">
-                    <Link className="nav-link" aria-current="page" to="/home">
-                        <img src={Logo} alt="" style={{ width: 80 }} />
-                    </Link>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+      <div className="container">
+
+        {/* Logo */}
+        <Link className="navbar-brand d-flex align-items-center" to="/home">
+          <img src={Logo} alt="logo" style={{ width: 60 }} />
+        </Link>
+
+        {/* Toggle Button */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Menu */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+
+          {/* Left Links */}
+          <ul className="navbar-nav me-auto">
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/home">Home</Link>
+            </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/home/orders">Orders</Link>
+            </li>
+
+          </ul>
+
+          {/* Right Side */}
+          <ul className="navbar-nav align-items-center">
+
+            {/* Cart with Badge */}
+            <li className="nav-item me-3">
+              <Link className="nav-link position-relative" to="/home/cart">
+                Cart
+                <span className="badge bg-warning text-dark ms-1">
+                  {cart.length}
                 </span>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/home">Home</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/home/cart">Cart:{cart.length}</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/home/orders">Orders</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/home/profile">Profile</Link>
-                        </li>
-                        <li className="nav-item">
-                            <button className="nav-link" onClick={()=>{
-                                setUser(null)
-                                window.sessionStorage.removeItem('token')
-                                navigate('/')
-                            }} >Logout</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+              </Link>
+            </li>
+
+            {/* Profile */}
+            <li className="nav-item me-3">
+              <Link className="nav-link" to="/home/profile">
+                Profile
+              </Link>
+            </li>
+
+            {/* Logout */}
+            <li className="nav-item">
+              <button
+                className="btn btn-outline-light btn-sm"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </li>
+
+          </ul>
+
+        </div>
+      </div>
+    </nav>
   )
 }
 
