@@ -2,10 +2,46 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { decrementQtyAction, incrementQtyAction } from '../slices/CartSlice'
 import { config } from '../services/config'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { placeOrder } from '../services/order'
 
 function Cart() {
   const cart = useSelector(state => state.cartReducer.cart)
   const dispatch = useDispatch()
+  const [qty, setQty] = useState(0)
+  const [totalBill, setTotalBill] = useState(0)
+
+  useEffect(()=>{
+    let totalqty = 0
+    let total = 0
+    for(let c of cart){
+      totalqty += c.qty
+      total += (c.price * c.qty)
+    }
+    setQty(totalqty)
+    setTotalBill(total)
+  },[cart])
+
+  const handlePlaceOrderClick = async ()=>{
+    const token = window.sessionStorage.getItem('token')
+    const orderdetails = {
+      total : totalBill,
+      items : cart
+    }
+    try{
+      const response = await placeOrder(token,orderdetails)
+      console.log("Cart.jsx --> ")
+      console.log(response)
+      if(response.status == 'success'){
+        toast.success('Order placed successfully..')
+        // dispatch(emptyCartAction())
+      }
+    }catch(error){
+      toast.error(error)
+    }
+  }
 
   return (
     <div className="container mt-4">
@@ -68,20 +104,26 @@ function Cart() {
 
         {/* Summary Section */}
         <div className="col-lg-4 col-md-12 mt-4 mt-lg-0">
-          <div className="card p-3 shadow-sm">
-            <h3>Summary</h3>
-
-            <hr />
-
-            <h5>
-              Total Bill: Rs.{" "}
-              {cart.reduce((total, item) => total + item.price * item.qty, 0)}
-            </h5>
-
-            <button className="btn btn-primary mt-3 w-100">
-              Checkout
-            </button>
-          </div>
+          <div className="col-3">
+                    <h2>Summary</h2>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>#Items</th>
+                                <th>{cart.length}</th>
+                            </tr>
+                            <tr>
+                                <th>#Quantity</th>
+                                <th>{qty}</th>
+                            </tr>
+                            <tr>
+                                <th>#Total</th>
+                                <th>{totalBill}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <button className="btn btn-primary col-12 mt-3" onClick={handlePlaceOrderClick} >Place Order</button>
+                </div>
         </div>
 
       </div>
