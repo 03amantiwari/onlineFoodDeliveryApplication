@@ -6,6 +6,7 @@ const cors = require('cors')
 const userRouter = require('./routes/user')
 const foodRouter = require('./routes/food')
 const authUser = require('./utils/auth')
+const orderRouter = require('./routes/order')
 
 
 //middlewares
@@ -17,6 +18,8 @@ app.use(authUser)
 //routes
 app.use('/user',userRouter)
 app.use('/food',foodRouter)
+app.use('/order',orderRouter)
+
 
 
 

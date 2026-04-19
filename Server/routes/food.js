@@ -14,8 +14,7 @@ router.get('/menu',async (req,res)=>{
     const sql = 'SELECT * FROM food'
     try{
         const data = await pool.query(sql)
-        console.log(data)
-        console.log(data[0])
+        
 
         res.send(createResult(data[0]))
     }
