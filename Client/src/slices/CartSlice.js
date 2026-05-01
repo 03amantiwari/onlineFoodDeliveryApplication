@@ -23,9 +23,12 @@ const CartSlice = createSlice({
                 state.cart.splice(index,1)
             else
                 state.cart[index].qty -= 1
+        },
+        clearCartAction: (state) => {
+            state.cart = []
         }
     }
 })
 
-export const {incrementQtyAction,decrementQtyAction,addCartAction} = CartSlice.actions
+export const {incrementQtyAction,decrementQtyAction,addCartAction,clearCartAction} = CartSlice.actions
 export default CartSlice
