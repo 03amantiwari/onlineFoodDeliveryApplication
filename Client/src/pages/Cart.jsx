@@ -1,17 +1,19 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { decrementQtyAction, incrementQtyAction } from '../slices/CartSlice'
+import { decrementQtyAction, incrementQtyAction ,clearCartAction} from '../slices/CartSlice'
 import { config } from '../services/config'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { placeOrder } from '../services/order'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 function Cart() {
   const cart = useSelector(state => state.cartReducer.cart)
   const dispatch = useDispatch()
   const [qty, setQty] = useState(0)
   const [totalBill, setTotalBill] = useState(0)
+  const navigate = useNavigate();
 
   useEffect(()=>{
     let totalqty = 0
@@ -30,14 +32,22 @@ function Cart() {
       total : totalBill,
       items : cart
     }
+    console.log("Cart : ")
+    console.log(cart)
     try{
       const response = await placeOrder(token,orderdetails)
-      console.log("Cart.jsx --> ")
-      console.log(response)
       if(response.status == 'success'){
+        dispatch(clearCartAction())
         toast.success('Order placed successfully..')
+        navigate('/home/orders', {
+            state: {
+                   cart: cart,
+                   orderId: Math.floor(Math.random() * 100000)
+                  }      
+      })
         // dispatch(emptyCartAction())
       }
+      
     }catch(error){
       toast.error(error)
     }
